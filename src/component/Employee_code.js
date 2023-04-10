@@ -11,15 +11,34 @@ class EmployeeCode extends Component {
     this.setState({
       CodeEmployee: event.target.value,
     });
-    console.log(this.state.CodeEmployee);
-};
-handleSubmit = (e)=>{
+  };
+  handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({
-        MenuCodeEmployee:[...this.state.MenuCodeEmployee,this.state.CodeEmployee]
-    })
-    console.log(this.state.MenuCodeEmployee)
-}
+    if (!this.state.CodeEmployee) {
+      alert("Mời nhập mã nhân viên!");
+      return;
+    }
+    let check = this.state.MenuCodeEmployee.find(
+      (item) => item === this.state.CodeEmployee
+    );
+    const reg = /^NV[a-z0-9]{8,15}/;
+    if (reg.test(this.state.CodeEmployee) ) {
+      console.log( this.state.CodeEmployee);
+      if (!check) {
+        this.setState({
+          MenuCodeEmployee: [
+            ...this.state.MenuCodeEmployee,
+            this.state.CodeEmployee,
+          ],
+        });
+        alert("Thêm mã nhân viên thành công!");
+      } else {
+        alert("Code đã tồn tại!");
+      }
+    }else{
+      alert("nhập không đúng cú pháp")
+    }
+   };
 
   render() {
     return (
@@ -32,12 +51,12 @@ handleSubmit = (e)=>{
           />
           <label>EmployeeCode </label>
           <button onClick={this.handleSubmit}> Submit</button>
-          <ul>
-          {this.state.MenuCodeEmployee.map((item,id)=>
-          {  return(<li>{item[id]}</li>)}
-          )}
-          </ul>
         </form>
+        <ul>
+          {this.state.MenuCodeEmployee.map((item, index) => {
+            return <li key={index}>{item}</li>;
+          })}
+        </ul>
       </>
     );
   }
